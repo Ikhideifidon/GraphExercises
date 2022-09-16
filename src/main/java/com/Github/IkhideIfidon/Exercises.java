@@ -25,7 +25,7 @@ public class Exercises {
 
     private static void dfsOne(char[][] grid, int r, int c) {
         // Skip out of bounds
-        if (r < 0 | c < 0 | r >= grid.length | c >= grid[0].length)
+        if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length)
             return;
 
         // Skip already visited cells
@@ -119,11 +119,9 @@ public class Exercises {
     }
 
     // Medium 207. Course Schedule
-    static Deque<Integer> cycle;
     public static boolean canFinish(int numCourses, int[][] prerequisites) {
         final boolean[] visited = new boolean[numCourses];
         final boolean[] onStack = new boolean[numCourses];
-        final int[] edgeTo = new int[numCourses];
         @SuppressWarnings("unchecked")
         final List<Integer>[] adjacent = (List<Integer>[]) new LinkedList[numCourses];
 
@@ -136,36 +134,136 @@ public class Exercises {
             adjacent[prerequisite[0]].add(prerequisite[1]);
 
         for (int v = 0; v < numCourses; v++) {
-            if (!visited[v])
-                dfsFour(v, visited, onStack, edgeTo, adjacent);
+            if (!visited[v]) {
+                boolean result = dfsFour(v, visited, onStack, adjacent);
+                if (result)
+                    return false;
+            }
         }
-        return !possibleToFinish();
+        return true;
     }
 
-    private static void dfsFour(int v, boolean[] visited, boolean[] onStack, int[] edgeTo, List<Integer>[] adjacent) {
+    private static boolean dfsFour(int v, boolean[] visited, boolean[] onStack, List<Integer>[] adjacent) {
         visited[v] = true;
         onStack[v] = true;
 
         for (int w : adjacent[v]) {
-            if (possibleToFinish())     // If possible to finish is false, that means there is a cycle.
-                return;
+            if (!visited[w])
+                dfsFour(w, visited, onStack, adjacent);
 
-            else if (!visited[w]) {
-                edgeTo[w] = v;
-                dfsFour(w, visited, onStack, edgeTo, adjacent);
-            }
-
-            else if (onStack[w]) {
-                cycle = new LinkedList<>();
-                for (int value = v; value != w; value = edgeTo[value])
-                    cycle.push(value);
-                cycle.push(w);
-                cycle.push(v);
-            }
+            // If the vertex w is still on stack, then there must be a cycle. Therefore, course scheduling will not finish
+            if (onStack[w])
+                return true;
         }
         onStack[v] = false;
+        return false;
     }
 
-    private static boolean possibleToFinish() { return cycle != null; }
+    // Medium 210. Course Schedule II
+    public static int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] preorder = new int[numCourses];
+        final boolean[] visited = new boolean[numCourses];
+        final boolean[] onStack = new boolean[numCourses];
+        final Deque<Integer> order = new LinkedList<>();
+        @SuppressWarnings("unchecked")
+        final List<Integer>[] adjacent = (List<Integer>[]) new LinkedList[numCourses];
+
+        // Initialize the adjacency list
+        for (int i = 0; i < numCourses; i++)
+            adjacent[i] = new LinkedList<>();
+
+        // Populate the adjacency list
+        for (int[] prerequisite : prerequisites)
+            adjacent[prerequisite[0]].add(prerequisite[1]);
+
+        for (int v = 0; v < numCourses; v++) {
+            if (!visited[v]) {
+                boolean result = dfs(v, visited, onStack, adjacent, order);
+                if (result)
+                    return new int[0];
+            }
+        }
+        for (int i = 0; i < numCourses; i++)
+            //noinspection ConstantConditions
+            preorder[i] = order.poll();
+        return preorder;
+    }
+
+    private static boolean dfs(int v, boolean[] visited, boolean[] onStack, List<Integer>[] adjacent, Deque<Integer> order) {
+        visited[v] = true;
+        onStack[v] = true;
+        order.offer(v);
+
+        for (int w : adjacent[v]) {
+            if (!visited[w])
+                dfs(w, visited, onStack, adjacent, order);
+
+            // If the vertex w is still on stack, then there must be a cycle. Therefore, course scheduling will not finish
+            if (onStack[w])
+                return true;
+        }
+        onStack[v] = false;
+        return false;
+    }
+
+    // Medium 994. Rotting Oranges
+    public static int orangesRotting(int[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+        Deque<int[]> queue = new LinkedList<>();
+        int countFresh = 0;
+
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                if (grid[r][c] == 2)
+                    queue.offer(new int[]{r, c});
+
+                else if (grid[r][c] == 1)
+                    countFresh++;
+            }
+        }
+
+        if (countFresh == 0)
+            return 0;
+
+        // Permissible directions for both r and c.
+        int[] dr = {1, -1, 0, 0};
+        int[] dc = {0, 0, 1, -1};
+        int minute = 0;
+
+        while (countFresh > 0 && !queue.isEmpty()) {
+            minute++;
+
+            int size = queue.size();
+            for (int x = 0; x < size; x++) {
+                int[] pairs = queue.poll();
+                for (int i = 0; i < dr.length; i++) {
+                    assert pairs != null;
+                    int rr = pairs[0] + dr[i];
+                    int cc = pairs[1] + dc[i];
+
+                    // Check Out of Bounds
+                    if (rr < 0 || cc < 0 || rr >= grid.length || cc >= grid[0].length)
+                        continue;
+
+                    // Skip non-permissible value
+                    if (grid[rr][cc] == 0)
+                        continue;
+
+                    // Skip already rotten orange
+                    if (grid[rr][cc] == 2)
+                        continue;
+
+                    // Mark the visited cells
+                    grid[rr][cc] = 2;
+
+                    // Enqueue the new rr and cc as a list
+                    queue.offer(new int[]{rr, cc});
+                    countFresh--;
+                }
+            }
+        }
+        return countFresh == 0 ? minute : -1;
+    }
 
 }
