@@ -208,6 +208,7 @@ public class Exercises {
 
     // Medium 994. Rotting Oranges
     public static int orangesRotting(int[][] grid) {
+
         int row = grid.length;
         int col = grid[0].length;
         Deque<int[]> queue = new LinkedList<>();
@@ -264,6 +265,69 @@ public class Exercises {
             }
         }
         return countFresh == 0 ? minute : -1;
+    }
+
+    // Medium: 417. Pacific Atlantic Water Flow
+
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        int row = heights.length;
+        int col = heights[0].length;
+        int[][] pacific = new int[row][col];
+        int[][] atlantic = new int[row][col];
+        int previousHeight = Integer.MIN_VALUE;
+        List<List<Integer>> result = new LinkedList<>();
+
+        // Top row of the Pacific ocean to the bottom row of the Atlantic ocean.
+        for (int column = 0; column < heights[0].length; column++) {
+            dfs(heights, 0, column, previousHeight, pacific);
+            dfs(heights, heights[row - 1].length, column, previousHeight, atlantic);
+        }
+
+        // left column of the Pacific ocean to the right  column of the Atlantic ocean.
+        for (int rows = 0; rows < heights.length; rows++) {
+            dfs(heights, rows,0, previousHeight, pacific);
+            dfs(heights, rows, heights.length, previousHeight, atlantic);
+        }
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (pacific[i][j] == 1 && atlantic[i][j] == 1) {
+                    LinkedList<Integer> temp = new LinkedList<>();
+                    temp.add(i, j);
+                    result.add(temp);
+                }
+            }
+        }
+        return  result;
+    }
+
+    private void dfs(int[][] heights, int row, int col, int previousHeight, int[][] visited) {
+        // Permissible Directions.
+        int[] dr = {-1, 1, 0, 0};
+        int[] dc = {0, 0, 1, -1};
+
+        for (int i = 0; i < dr.length; i++) {
+            int rr = row + dr[i];
+            int cc = col + dc[i];
+
+            // Check boundary conditions
+            if (rr < 0 || cc < 0 || rr >= heights.length || cc >= heights[0].length)
+                continue;
+
+            // Check if visited
+            if (visited[rr][cc] == 1)
+                continue;
+
+            // Check if this cell can be traversed
+            if (heights[rr][cc] < previousHeight)
+                continue;
+
+            // Mark visited cell
+            visited[rr][cc] = 1;
+
+            dfs(heights, rr, cc, previousHeight, visited);
+        }
+
     }
 
 }
