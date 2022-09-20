@@ -280,13 +280,13 @@ public class Exercises {
         // Top row of the Pacific ocean to the bottom row of the Atlantic ocean.
         for (int column = 0; column < heights[0].length; column++) {
             dfs(heights, 0, column, previousHeight, pacific);
-            dfs(heights, heights[row - 1].length, column, previousHeight, atlantic);
+            dfs(heights, heights.length - 1, column, previousHeight, atlantic);
         }
 
         // left column of the Pacific ocean to the right  column of the Atlantic ocean.
         for (int rows = 0; rows < heights.length; rows++) {
-            dfs(heights, rows,0, previousHeight, pacific);
-            dfs(heights, rows, heights.length, previousHeight, atlantic);
+            dfs(heights, rows, 0, previousHeight, pacific);
+            dfs(heights, rows, heights[0].length - 1, previousHeight, atlantic);
         }
 
         for (int i = 0; i < row; i++) {
