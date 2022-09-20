@@ -314,7 +314,7 @@ public class Exercises {
             if (rr < 0 || cc < 0 || rr >= heights.length || cc >= heights[0].length)
                 continue;
 
-            // Check if visited
+            // Skip already visited
             if (visited[rr][cc] == 1)
                 continue;
 
@@ -327,7 +327,6 @@ public class Exercises {
 
             dfs(heights, rr, cc, previousHeight, visited);
         }
-
     }
 
 }
