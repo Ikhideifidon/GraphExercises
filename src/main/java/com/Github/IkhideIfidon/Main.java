@@ -11,6 +11,7 @@ public class Main {
         five();
         six();
         seven();
+        eight();
 
     }
 
@@ -113,6 +114,15 @@ public class Main {
                         {5, 1, 1, 2, 4}
                 };
         System.out.println(Exercises.pacificAtlantic(heights));
+    }
+
+    public static void eight() {
+        int n = 5;
+        int[][] edges =
+        {
+            {1, 0}, {3, 1}, {0, 4}, {2, 1}
+        };
+        System.out.println(Exercises.countPairs(n, edges));
     }
 
 }

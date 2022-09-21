@@ -1,8 +1,6 @@
 package com.Github.IkhideIfidon;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Exercises {
 
@@ -324,6 +322,45 @@ public class Exercises {
             int rr = r + dr[i];
             int cc = c + dc[i];
             dfs(heights, rr, cc, heights[r][c], visited);
+        }
+    }
+
+    // Medium.2316. Count Unreachable Pairs of Nodes in an Undirected Graph
+
+    static int connectedComponentsCount = 0;
+    public static int countPairs(int n, int[][] edges) {
+        // This is a connected components related question.
+
+        int[] ids = new int[n];
+        boolean[] marked = new boolean[n];
+        @SuppressWarnings("unchecked")
+        List<Integer>[] adjacent = (List<Integer>[]) new LinkedList[n];
+
+        // Initialize the adjacency list
+        for (int i = 0; i < n; i++)
+            adjacent[i] = new LinkedList<>();
+
+        // Populate the adjacent list
+        for (int[] edge : edges) {
+            adjacent[edge[0]].add(edge[1]);
+        }
+
+        for (int v = 0; v < n; v++) {
+            if (!marked[v]) {
+                dfs(adjacent, v, marked, ids);
+                connectedComponentsCount++;
+            }
+        }
+        return connectedComponentsCount;
+
+    }
+
+    private static void  dfs(List<Integer>[] adjacent, int v, boolean[] marked, int[] ids) {
+        marked[v] = true;
+        ids[v] = connectedComponentsCount;
+        for (int w : adjacent[v]) {
+            if (!marked[w])
+                dfs(adjacent, w, marked, ids);
         }
     }
 
