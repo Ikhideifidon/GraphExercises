@@ -269,63 +269,61 @@ public class Exercises {
 
     // Medium: 417. Pacific Atlantic Water Flow
 
-    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+    public static List<List<Integer>> pacificAtlantic(int[][] heights) {
         int row = heights.length;
         int col = heights[0].length;
-        int[][] pacific = new int[row][col];
-        int[][] atlantic = new int[row][col];
+        int[][] pacific = new int[row][col];        // Visited Pacific Ocean
+        int[][] atlantic = new int[row][col];       // Visited Atlantic Ocean
         int previousHeight = Integer.MIN_VALUE;
         List<List<Integer>> result = new LinkedList<>();
 
-        // Top row of the Pacific ocean to the bottom row of the Atlantic ocean.
+        // The top of the island borders the Pacific ocean and the bottom of the island borders the Atlantic ocean
+        // Check the cells that are able to reach the pacific ocean from the atlantic ocean and vice versa.
         for (int column = 0; column < heights[0].length; column++) {
             dfs(heights, 0, column, previousHeight, pacific);
             dfs(heights, heights.length - 1, column, previousHeight, atlantic);
         }
 
-        // left column of the Pacific ocean to the right  column of the Atlantic ocean.
+        // The left of the island borders the Pacific Ocean and the right of the island borders the Atlantic ocean.
+        // Check the cells that are able to reach the atlantic ocean from the pacific ocean and vice versa.
         for (int rows = 0; rows < heights.length; rows++) {
-            dfs(heights, rows, 0, previousHeight, pacific);
+            dfs(heights, rows,0, previousHeight, pacific);
             dfs(heights, rows, heights[0].length - 1, previousHeight, atlantic);
         }
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                if (pacific[i][j] == 1 && atlantic[i][j] == 1) {
-                    LinkedList<Integer> temp = new LinkedList<>();
-                    temp.add(i, j);
-                    result.add(temp);
-                }
+                if (pacific[i][j] == 1 && atlantic[i][j] == 1)
+                    result.add(List.of(i, j));
             }
         }
         return  result;
     }
 
-    private void dfs(int[][] heights, int row, int col, int previousHeight, int[][] visited) {
+    private static void dfs(int[][] heights, int r, int c, int previousHeight, int[][] visited) {
+        // Skip Boundary conditions
+        if (r < 0 || c < 0 || r >= heights.length || c >= heights[0].length)
+            return;
+
+        // Skip already visited
+        if (visited[r][c] == 1)
+            return;
+
+        // Skip cells less than the previous height.
+        if (heights[r][c] < previousHeight)
+            return;
+
+        // Mark visited cell
+        visited[r][c] = 1;
+
         // Permissible Directions.
         int[] dr = {-1, 1, 0, 0};
         int[] dc = {0, 0, 1, -1};
 
         for (int i = 0; i < dr.length; i++) {
-            int rr = row + dr[i];
-            int cc = col + dc[i];
-
-            // Check boundary conditions
-            if (rr < 0 || cc < 0 || rr >= heights.length || cc >= heights[0].length)
-                continue;
-
-            // Skip already visited
-            if (visited[rr][cc] == 1)
-                continue;
-
-            // Check if this cell can be traversed
-            if (heights[rr][cc] < previousHeight)
-                continue;
-
-            // Mark visited cell
-            visited[rr][cc] = 1;
-
-            dfs(heights, rr, cc, previousHeight, visited);
+            int rr = r + dr[i];
+            int cc = c + dc[i];
+            dfs(heights, rr, cc, heights[r][c], visited);
         }
     }
 

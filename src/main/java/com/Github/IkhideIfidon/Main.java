@@ -10,6 +10,7 @@ public class Main {
         four();
         five();
         six();
+        seven();
 
     }
 
@@ -100,6 +101,18 @@ public class Main {
     public static void six() {
         int[][] grid = {{2, 1, 1}, {1, 1, 1}, {0, 1, 2}};
         System.out.println(Exercises.orangesRotting(grid));
+    }
+
+    public  static void seven() {
+        int[][] heights =
+                {
+                        {1, 2, 2, 3, 5},
+                        {3, 2, 3, 4, 4},
+                        {2, 4, 5, 3, 1},
+                        {6, 7, 1, 4, 5},
+                        {5, 1, 1, 2, 4}
+                };
+        System.out.println(Exercises.pacificAtlantic(heights));
     }
 
 }
