@@ -12,6 +12,7 @@ public class Main {
         six();
         seven();
         eight();
+        nine();
 
     }
 
@@ -117,12 +118,55 @@ public class Main {
     }
 
     public static void eight() {
-        int n = 5;
+        int n = 7;
         int[][] edges =
         {
-            {1, 0}, {3, 1}, {0, 4}, {2, 1}
+            {0, 2}, {0, 5}, {2, 4}, {1, 6}, {5, 4}
         };
         System.out.println(Exercises.countPairs(n, edges));
+    }
+
+    public static void nine() {
+        char[][] board =
+                {
+                        {'X', 'X', 'X', 'X'},
+                        {'X', 'O', 'O', 'X'},
+                        {'X', 'X', 'O', 'X'},
+                        {'X', 'O', 'X', 'X'}
+                };
+
+        char[][] board1 =
+                {
+                        {'X', 'X', 'X'},
+                        {'X', 'O', 'O'},
+                        {'X', 'O', 'O'},
+                        {'X', 'O', 'O'}
+                };
+
+        char[][] board2 =
+                {
+                        {'O', 'O', 'O'},
+                        {'O', 'O', 'O'},
+                        {'O', 'O', 'O'}
+                };
+
+        char[][] board3 =
+                {
+                        {'X', 'O', 'X'},
+                        {'X', 'O', 'X'},
+                        {'X', 'O', 'X'}
+                };
+
+        char[][] board4 =
+                {
+                        {'X', 'X', 'X', 'O', 'X', 'X'},
+                        {'X', 'O', 'X', 'O', 'O', 'X'},
+                        {'X', 'X', 'O', 'X', 'X', 'O'},
+                        {'X', 'O', 'O', 'X', 'X', 'X'},
+                        {'X', 'X', 'X', 'X', 'X', 'X'}
+                };
+
+        Exercises.solve(board3);
     }
 
 }

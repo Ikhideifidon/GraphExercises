@@ -327,11 +327,9 @@ public class Exercises {
 
     // Medium.2316. Count Unreachable Pairs of Nodes in an Undirected Graph
 
-    static int connectedComponentsCount = 0;
-    public static int countPairs(int n, int[][] edges) {
+    public static long countPairs(int n, int[][] edges) {
         // This is a connected components related question.
 
-        int[] ids = new int[n];
         boolean[] marked = new boolean[n];
         @SuppressWarnings("unchecked")
         List<Integer>[] adjacent = (List<Integer>[]) new LinkedList[n];
@@ -343,24 +341,102 @@ public class Exercises {
         // Populate the adjacent list
         for (int[] edge : edges) {
             adjacent[edge[0]].add(edge[1]);
+            adjacent[edge[1]].add(edge[0]);
         }
 
+        int sum = n;
+        int sizeOfConnectedComponents;
+        long result = 0;
         for (int v = 0; v < n; v++) {
             if (!marked[v]) {
-                dfs(adjacent, v, marked, ids);
-                connectedComponentsCount++;
+                sizeOfConnectedComponents = dfs(adjacent, v, marked, new int[1]);
+                sum = sum - sizeOfConnectedComponents;
+                result += (long) sum * sizeOfConnectedComponents;
             }
         }
-        return connectedComponentsCount;
+        return result;
 
     }
 
-    private static void  dfs(List<Integer>[] adjacent, int v, boolean[] marked, int[] ids) {
+    private static int  dfs(List<Integer>[] adjacent, int v, boolean[] marked, int[] count) {
         marked[v] = true;
-        ids[v] = connectedComponentsCount;
+        count[0]++;
         for (int w : adjacent[v]) {
             if (!marked[w])
-                dfs(adjacent, w, marked, ids);
+                dfs(adjacent, w, marked, count);
+        }
+        return count[0];
+    }
+
+    // Medium 130. Surrounded Regions
+
+    public static void solve(char[][] board) {
+        // After careful analysis, we can conclude that if there is any 'O' at the border, it
+        // is un-flippable and if that 'O' is connected to another 'O' such 'O' is also
+        // un-flippable.
+
+        // The basic idea is therefore to find all 'O' connected to the 'O' at the border
+        // (if any).
+
+        int m = board.length;
+        int n = board[0].length;
+        boolean[] visited = new boolean[m];
+        /*
+
+        [X  O  X  X  X]                   [X  X  X  X  X]
+        [X  O  O  O  X]                   [X  O  O  O  X]
+        [X  O  X  X  X]                   [X  O  X  X  X]
+        [X  X  X  X  X]                   [X  X  X  X  X]
+
+         */
+
+        // 1. Move over the first and the last column.
+        for (int row = 0; row < m; row++) {
+            if (board[row][0] == 'O')
+                dfs(board, row, 0);
+            if (board[row][n - 1] == 'O')
+                dfs(board, row, n - 1);
+        }
+
+        // 2. Move over the first and last row
+        for (int column = 0; column < n; column++) {
+            if (board[0][column] == 'O')
+                dfs(board, 0, column);
+            if (board[m - 1][column] == 'O')
+                dfs(board, m - 1, column);
+
+        }
+
+        // 3. For every position in the board, check if 'O' is marked from the operations of 2 and 3 above.
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                if (board[row][col] == 'O')
+                    board[row][col] = 'X';
+
+                if (board[row][col] == '#')
+                    board[row][col] = 'O';
+            }
+        }
+        System.out.println(Arrays.deepToString(board));
+     }
+
+    private static void dfs(char[][] board, int i, int j) {
+        // Visited board position
+        board[i][j] = '#';
+
+        // Permissible Directions
+        int[] dr = {-1, 1, 0, 0};
+        int[] dc = {0, 0, 1, -1};
+
+        for (int x = 0; x < 4; x++) {
+            int rr = i + dr[x];
+            int cc = i + dc[x];
+
+            // Out of bounds
+            if (rr < 0 || cc < 0 || rr >= board.length || cc >= board[0].length || board[rr][cc] != 'O')
+                continue;
+
+            dfs(board, rr, cc);
         }
     }
 
