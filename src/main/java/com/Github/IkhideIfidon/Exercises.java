@@ -375,12 +375,11 @@ public class Exercises {
         // is un-flippable and if that 'O' is connected to another 'O' such 'O' is also
         // un-flippable.
 
-        // The basic idea is therefore to find all 'O' connected to the 'O' at the border
+        // The basic idea is to find all 'O' connected to the 'O' at the border
         // (if any).
 
         int m = board.length;
         int n = board[0].length;
-        boolean[] visited = new boolean[m];
         /*
 
         [X  O  X  X  X]                   [X  X  X  X  X]
@@ -417,10 +416,17 @@ public class Exercises {
                     board[row][col] = 'O';
             }
         }
-        System.out.println(Arrays.deepToString(board));
      }
 
     private static void dfs(char[][] board, int i, int j) {
+        // Out of bounds
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length)
+            return;
+
+        // Visited or Forbidden position
+        if (board[i][j] != 'O')
+            return;
+
         // Visited board position
         board[i][j] = '#';
 
@@ -428,16 +434,83 @@ public class Exercises {
         int[] dr = {-1, 1, 0, 0};
         int[] dc = {0, 0, 1, -1};
 
-        for (int x = 0; x < 4; x++) {
+        for (int x = 0; x < dr.length; x++) {
             int rr = i + dr[x];
-            int cc = i + dc[x];
-
-            // Out of bounds
-            if (rr < 0 || cc < 0 || rr >= board.length || cc >= board[0].length || board[rr][cc] != 'O')
-                continue;
+            int cc = j + dc[x];
 
             dfs(board, rr, cc);
         }
+    }
+
+    // Walls and Gates
+    public static void wallsAndGates(int[][] rooms) {
+
+        /*
+            [INF -1   0  INF]
+            [INF INF INF  -1]
+            [INF -1  INF  -1]
+            [0   -1  INF INF]
+         */
+        // -1 --> A Wall or an Obstacle
+        //  0 -----> A gate
+        // INF ----. Integer.MAX_VALUE ---> Empty room;
+
+        int row = rooms.length;
+        int col = rooms[0].length;
+        boolean[][] visited = new boolean[row][col];
+
+        Deque<int[]> queue = new LinkedList<>();
+
+        // Iterate through the rooms and enqueue any gate if present
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (rooms[i][j] == 0) {
+                    queue.offer(new int[]{i, j});
+                    visited[i][j] = true;
+                }
+            }
+        }
+
+        int distance = 0;
+
+        // Permissible Directions
+        int[] dr = {-1, 1, 0, 0};
+        int[] dc = {0, 0, 1, -1};
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            // Iterate through each element of the queue.
+            for (int i = 0; i < size; i++) {
+                int[] pairs = queue.poll();
+                assert pairs != null;
+                rooms[pairs[0]][pairs[1]] = distance;
+                for (int p = 0; p < dr.length; p++) {
+                    int rr = pairs[0] + dr[p];
+                    int cc = pairs[1] + dc[p];
+
+                    // Check Out of Bounds
+                    if (rr < 0 || cc < 0 || rr >= row || cc >= col)
+                        continue;
+
+                    // Skip already visited
+                    if (visited[rr][cc])
+                        continue;
+
+                    // Skip a wall or obstacle
+                    if (rooms[rr][cc] == -1)
+                        continue;
+
+                    // Mark visited
+                    visited[rr][cc] = true;
+
+                    // Enqueue the new position.
+                    queue.offer(new int[] {rr, cc});
+                }
+            }
+            distance++;
+        }
+        System.out.println(Arrays.deepToString(rooms));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.Github.IkhideIfidon;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 
 public class Main {
@@ -13,6 +14,7 @@ public class Main {
         seven();
         eight();
         nine();
+        ten();
 
     }
 
@@ -167,6 +169,18 @@ public class Main {
                 };
 
         Exercises.solve(board3);
+    }
+
+    public static void ten() {
+        int INF = Integer.MAX_VALUE;
+        int[][] rooms =
+                {
+                        {INF, -1,   0,  INF},
+                        {INF, INF, INF,  -1},
+                        {INF, -1,  INF,  -1},
+                        {0,   -1,  INF,  INF}
+                };
+        Exercises.wallsAndGates(rooms);
     }
 
 }
