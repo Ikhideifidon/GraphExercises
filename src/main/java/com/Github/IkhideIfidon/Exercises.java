@@ -513,4 +513,26 @@ public class Exercises {
         System.out.println(Arrays.deepToString(rooms));
     }
 
+    static LinkedList<String> route = new LinkedList<>();
+    static Map<String, PriorityQueue<String>> adjacent = new HashMap<>();
+    public static List<String> findItinerary(String[][] tickets) {
+        
+        if (tickets == null || tickets.length == 0) {
+                return route;
+        }
+
+        for (String[] ticket : tickets) {
+            // Populate the adjacent map
+            adjacent.computeIfAbsent(ticket[0], k -> new PriorityQueue<>()).add(ticket[1]);
+        }
+
+        dfs("JFK");
+        return route;
+   }
+
+   private static void dfs(String airport) {
+        while (adjacent.containsKey(airport) && !adjacent.get(airport).isEmpty())
+            dfs(adjacent.get(airport).poll());
+        route.offerFirst(airport);
+   }
 }

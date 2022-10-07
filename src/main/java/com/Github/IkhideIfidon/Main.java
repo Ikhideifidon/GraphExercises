@@ -1,6 +1,5 @@
 package com.Github.IkhideIfidon;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 
 public class Main {
@@ -15,6 +14,13 @@ public class Main {
         eight();
         nine();
         ten();
+        eleven();
+        twelve();
+        thirteen();
+        fourteen();
+
+
+
 
     }
 
@@ -182,5 +188,42 @@ public class Main {
                 };
         Exercises.wallsAndGates(rooms);
     }
+
+    public static void eleven() {
+        String[][] tickets = 
+        {
+                {"JFK", "SFO"},
+                {"JFK", "ATL"},
+                {"SFO", "ATL"},
+                {"ATL", "JFK"},
+                {"ATL", "SFO"}
+        };
+
+        System.out.println(Exercises.findItinerary(tickets));
+
+    }
+
+    public static void twelve() {
+        int[] nums = {1, 2, 3};
+
+        System.out.println(Backtracking.subsets(nums));
+    }
+
+    public static void thirteen() {
+        int[] nums = {1, 2, 2};
+
+        System.out.println(Backtracking.subsetsWithDup(nums));
+    }
+
+    public static void fourteen() {
+        int[] nums = {1, 1, 2};
+
+        System.out.println(Backtracking.permuteUnique(nums));
+    }
+
+
+
+
+
 
 }
