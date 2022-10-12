@@ -4,23 +4,26 @@ import java.util.*;
 
 public class Backtracking {
 
+    // Time complexity = O(n!)
     public static List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> list = new ArrayList<>();
-        // Arrays.sort(nums); // not necessary
-        backtrack(list, new ArrayList<>(), nums);
-        return list;
+        List<List<Integer>> result = new ArrayList<>();
+        permuteBacktrack(nums, new ArrayList<>(), result);
+        return result;
     }
 
-    private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
-        if(tempList.size() == nums.length){
-            list.add(new ArrayList<>(tempList));
-        } else{
-            for (int num : nums) {
-                if (tempList.contains(num)) continue; // element already exists, skip
-                tempList.add(num);
-                backtrack(list, tempList, nums);
-                tempList.remove(tempList.size() - 1);
-            }
+    private static void permuteBacktrack(int[] nums, List<Integer> temp, List<List<Integer>> result) {
+        if (temp.size() == nums.length)
+            result.add(new ArrayList<>(temp));
+
+        for (int num : nums) {
+            if (temp.contains(num))
+                continue;
+
+            // Decision to take
+            temp.add(num);
+            permuteBacktrack(nums, temp, result);
+            // Decision NOT to take
+            temp.remove(temp.size() - 1);
         }
     }
 
@@ -96,11 +99,11 @@ public class Backtracking {
         return result;
     }
 
+    // Medium: 47. Permutations II
     private static void backtrackPermuteUnique(int[] nums, List<Integer> tempList, List<List<Integer>> result, Map<Integer, Integer> frequency) {
         // [1, 1, 2] -----> [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
         if (tempList.size() == nums.length) {
             result.add(new ArrayList<>(tempList));
-            return;
         }
 
         for (Integer key : frequency.keySet()) {
@@ -116,6 +119,140 @@ public class Backtracking {
             }
         }
     }
+
+    // Medium: 39. Combination Sum
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        /*
+            candidates = [2,3,5], target = 8
+            [[2,2,2,2], [2,3,3], [3,5]]
+         */
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(candidates, 0, 0, target, new ArrayList<>(), result);
+        return result;
+    }
+    private static void backtrack(int[] candidates, int start, int total, int target, List<Integer> temp, List<List<Integer>> result ) {
+        if (total == target) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+
+        if (start >= candidates.length || total > target)
+            return;
+
+        if (total + candidates[start] > target)
+            return;
+
+        // Decision to add candidates[start]
+        temp.add(candidates[start]);
+        backtrack(candidates, start, total + candidates[start], target, temp, result);
+
+        // Decision NOT to add candidates[start]
+        temp.remove(temp.size() - 1);
+        backtrack(candidates, start + 1, total, target, temp, result);
+    }
+
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() == 0)
+            return "";
+        int n = s.length();
+        if (n <= 2) {
+            return n == 1 ? s : (s.charAt(0) == s.charAt(1) ? s : s.substring(0, 1));
+        }
+
+        String w = new StringBuilder(s).reverse().toString();
+        int[][] dp = new int[n][n];
+
+        // Populate the first row of dp
+        for (int j = 0; j < n; j++) {
+            if (w.charAt(0) == s.charAt(j))
+                dp[0][j] = 1;
+        }
+
+        // Populate the first column of dp
+        for (int i = 0; i < n; i++) {
+            if (w.charAt(i) == s.charAt(0))
+                dp[i][0] = 1;
+        }
+
+        int maxLength = 0;
+        int m = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < n; j++) {
+                if (w.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    if (dp[i][j] > maxLength) {
+                        maxLength = dp[i][j];
+                        m = j;
+                    }
+                } else
+                        dp[i][j] = 0;
+            }
+        }
+        System.out.println(Arrays.deepToString(dp));
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < maxLength; i++)
+            sb.append(s.charAt(m--));
+
+        return sb.toString();
+    }
+
+    public static List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> result = new ArrayList<>();
+        combinationBacktrack(k, n, 1, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    private static void combinationBacktrack(int k, int n, int start, int total, List<Integer> temp, List<List<Integer>> result) {
+        if (temp.size() == k && total == n) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+
+        if (temp.size() == k || total > n)
+            return;
+
+        if (total  + start > n)
+            return;
+
+        for (int num = start; num <= n; num++) {
+            // Decision to add
+            temp.add(num);
+            combinationBacktrack(k, n, num + 1, total + num, temp, result);
+
+            // Decision to remove
+            temp.remove(temp.size() - 1);
+        }
+    }
+
+    // Combination Sum II
+    public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(candidates);
+        backtrackCombinationSum2(candidates, target, 0, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    private static void backtrackCombinationSum2(int[] candidates, int target, int total, int start, List<Integer> temp, List<List<Integer>> result) {
+        if (total == target) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+
+        if (total > target)
+            return;
+
+        //
+
+        for (int i = start; i < candidates.length; i++) {
+            if(i > start && candidates[i] == candidates[i-1])               // skip duplicates
+                continue;
+            temp.add(candidates[i]);
+            backtrackCombinationSum2(candidates, target, total + candidates[i], i + 1, temp, result);
+            temp.remove(temp.size() - 1);
+        }
+    }
+
 
 
 }
