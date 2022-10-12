@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="555b7d30-afce-4560-8e96-66907f2e8c25" name="Changes" comment="Graph Exercises">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Backtracking.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Exercises.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Exercises.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Backtracking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Backtracking.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Github/IkhideIfidon/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -135,7 +134,21 @@
       <option name="project" value="LOCAL" />
       <updated>1664597288897</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Graph Exercises">
+      <created>1665161486300</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1665161486300</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Graph Exercises">
+      <created>1665592725659</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1665592725659</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

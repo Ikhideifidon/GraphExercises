@@ -242,7 +242,8 @@ public class Backtracking {
         if (total > target)
             return;
 
-        //
+        if (total + candidates[start] > target)
+            return;
 
         for (int i = start; i < candidates.length; i++) {
             if(i > start && candidates[i] == candidates[i-1])               // skip duplicates
@@ -252,7 +253,6 @@ public class Backtracking {
             temp.remove(temp.size() - 1);
         }
     }
-
 
 
 }

@@ -18,6 +18,10 @@ public class Main {
         twelve();
         thirteen();
         fourteen();
+        fifteen();
+        sixteen();
+        seventeen();
+        eighteen();
 
 
 
@@ -206,7 +210,7 @@ public class Main {
     public static void twelve() {
         int[] nums = {1, 2, 3};
 
-        System.out.println(Backtracking.subsets(nums));
+        System.out.println(Backtracking.permute(nums));
     }
 
     public static void thirteen() {
@@ -220,6 +224,34 @@ public class Main {
 
         System.out.println(Backtracking.permuteUnique(nums));
     }
+
+    public static void fifteen() {
+        int[] candidates = {2, 3, 5};
+        int target = 8;
+
+        System.out.println(Backtracking.combinationSum(candidates, target));
+    }
+
+    public static void sixteen() {
+        String s = "aacecdecaa";
+
+        System.out.println(Backtracking.longestPalindrome(s));
+    }
+
+    public static void seventeen() {
+        int k = 3;
+        int n = 7;
+
+        System.out.println(Backtracking.combinationSum3(k, n));
+    }
+
+    public static void eighteen() {
+        int[] candidates = {2, 5, 2, 1, 2};
+        int target = 5;
+
+        System.out.println(Backtracking.combinationSum2(candidates, target));
+    }
+
 
 
 
